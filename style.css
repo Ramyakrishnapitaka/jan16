@@ -1,0 +1,18 @@
+#page{
+    text-align: right;
+}
+table,th,td{
+    border: 1px solid black;
+}
+body{
+    margin:5px;
+    padding: 10px;
+    
+}
+#figure{
+    font-style: italic;
+    text-align: center;
+}
+p{
+    text-align: justify;
+}

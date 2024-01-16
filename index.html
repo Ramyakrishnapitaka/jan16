@@ -1,0 +1,298 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <p id ="page">211</p> 
+        <p>Find the first such that
+        <img src="Screenshot (1.0).png"></p>
+        <p>where <i>K</i> is the dimension of the neighborhood and is defined as a ratio to the map’s dimension.
+For example, if the map contains an 8×8 grid of neurons, <i>K</i>=4 means that the dimension of the
+neighborhood is one-fourth of the map’s dimension, which is 2 in this case. The depth <i>d</i> that
+satisfies Eq. 8 is then 2.</p>
+        <p>&nbsp &nbsp &nbsp &nbsp Notice that there some “spare” neurons may exist that are not used in any hierarchy
+after the hierarchy generation process. These neurons represent document clusters that are
+not significant enough to be a dominating neuron of a super-cluster in any stage of the
+process. Although we can extend the depths in the hierarchy generation process to enclose
+all neurons into the hierarchies, sometimes we may decide not to do so because we want a
+higher document-cluster ratio, that is, a cluster that contains a significant amount of
+documents. For example, if all clusters contain very few documents, it is not wise to use all
+clusters in the hierarchies because we may have a set of hierarchies that each contains many
+nodes without much information. To avoid producing such over-sized hierarchies, we may
+adopt a different approach. When the hierarchies have been created and there still exist some
+spare neurons, we simply assign each spare neuron to its nearest neighbor. This in effect
+merges the document clusters associated with these spare neurons into the hierarchies. The
+merging process is necessary to achieve a reasonable document-cluster ratio.</p>
+        <h1>Automatic Category Theme Identification</h1>
+        <p>&nbsp &nbsp &nbsp &nbsp In last section we showed how to obtain the category hierarchies from the DCM. In each
+category hierarchy, a leaf node represents an individual neuron as well as a category. In this
+subsection, we will show a method to assign each node in a hierarchy to a label and create
+a human-interpretable hierarchy. These labels reflect the themes of their associated nodes,
+that is, categories. Moreover, the label of a parent category in a hierarchy should represent
+the common theme of its child categories. Thus, the label of the root node of a hierarchy should
+represent the common theme of all categories under this hierarchy. Traditionally, a label
+usually contains only a word or a simple phrase to allow easy comprehension for humans.
+In this work, we try to identify category themes, i.e., category labels, by examining the WCM.
+As we mentioned before, any neuron i in the DCM represents a category and includes a set
+of similar documents. The same neuron in the WCM contains a set of words that often cooccur in such set of documents. Since neighboring neurons in the DCM contain similar
+documents, some significant words should occur often in these documents. The word that
+many neighboring neurons try to learn most should be the most important word and, as a
+result, the theme of a category. Thus, we may find the most significant word of a category
+by examining the synaptic weight vectors of its corresponding neuron and neighboring
+neurons. In the following, we will show how to find the category themes. Let Ck
+ denote the
+set of neurons that belong to the kth super-cluster, or category. The category terms are
+selected from those words that are associated with these neurons in word cluster map. For
+all neurons j∈Ck
+, we select the n*
+th word as the category term if</p>
+        <p id ="page">212</p>
+        <img src="Screenshot (30).png">
+        <p>where G: R+ + {0}→ R+ is a monotonically non-decreasing weighting function. G(j,k) will
+increase when the distance between neuron j and neuron k increases. The above equation
+selects the word that is most important to a super-cluster since the weight vector of a synaptic
+in a neuron reflects the willingness of that neuron to learn the corresponding input data, i.e.,
+word. We apply Eq. 9 in each stage of the super-cluster generation process so when a new
+super-cluster is found, its theme is also determined. In STAGE-1, the selected themes label
+the root nodes of every category hierarchy. Likewise, the selected themes in STAGE-n are
+used as labels of the nth level nodes in each hierarchy. If a word has been selected in previous
+stages, it will not be a candidate of the themes in the following stages.</p>
+        <p>&nbsp &nbsp &nbsp &nbsp The terms selected by Eq. 9 form the top layer of the category structure. To find the
+descendants of these terms in the category hierarchy, we may apply the above process to
+each super-cluster. A set of sub-categories will be obtained. These sub-categories form the
+new super-clusters that are on the second layer of the hierarchy. The category structure can
+then be revealed by recursively applying the same category generation process to each
+newfound super-cluster. We decrease the size of neighborhoods in selecting dominating
+neurons when we try to find the sub-categories</p>
+        <h1>EXPERIMENTAL RESULTS</h1>
+        <p>&nbsp &nbsp &nbsp &nbsp We applied our method to the Chinese news articles posted daily on the Web by the
+CNA (Central News Agency). Two corpora were constructed in our experiments. The first
+corpus (CORPUS-1) contains 100 news articles posted on August 1, 2, and 3, 1996. The second
+corpus (CORPUS-2) contains 3,268 documents posted between October 1 and October 9,
+1996. A word extraction process was applied to the corpora to extract Chinese words. A total
+of 1,475 and 10,937 words were extracted from CORPUS-1 and CORPUS-2, respectively. To
+reduce the dimensionality of the feature vectors, we discarded those words that occurred only
+once in a document. We also discarded the words that appeared in a manually constructed
+stoplist. This reduced the number of words to 563 and 1,976 for CORPUS-1 and CORPUS-2,
+respectively. A reduction rate of 62% and 82% was achieved for the two corpora respectively.</p>
+        <p>&nbsp &nbsp &nbsp &nbsp To train CORPUS-1, we constructed a self-organizing map that contains 64 neurons in
+an 8×8 grid format. The number of neurons was determined experimentally so that a better
+clustering could be achieved. Each neuron in the map contains 563 synapses. The initial
+training gain was set to 0.4, and the maximal training time was set to 100. These settings were
+also determined experimentally. We tried different gain values ranging from 0.1 to 1.0 and
+various training time setting ranging from 50 to 200. We simply adopted the setting that
+achieved the most satisfying result. After training, we labeled the map by documents and
+words respectively, and obtained the DCM and the WCM for CORPUS-1. The above process
+was also applied to CORPUS-2 and obtained the DCM and the WCM for CORPUS-2 using
+a 20×20 map.</p>
+        <p>&nbsp &nbsp &nbsp &nbsp After the clustering process, we then applied the category generation process to the
+DCM to obtain the category hierarchies. In our experiments, we limited the number of</p>
+        <p id ="page">213</p>
+        <p>dominating neurons to 10. We limited the depths of hierarchy to 2 and 3 for CORPUS-1 and
+CORPUS-2, respectively. In Figures 4 and 5, we show the overall category hierarchies
+developed from CORPUS-1. Each tree depicts a category hierarchy where the number on the
+root node depicts the super-cluster found. The number of hierarchies is the same as the
+number of super-clusters found at the first iteration of the hierarchy generation process
+(STAGE-1). Each leaf node in a tree represents a cluster in the DCM. The parent node of some
+child nodes in level n of a tree represents a super-cluster found in STAGE-(n-1). For example,
+the root node of the largest tree in Figure 4 has a number 35, specifying that neuron 35 is one
+of the 10 dominating neurons found in STAGE-1. This node has 10 children, which are the
+10 dominating neurons obtained in STAGE-2. These child nodes comprise the second level
+of the hierarchy. The third level nodes are obtained after STAGE-3. The number enclosed in
+a leaf node is the neuron index of its associated cluster in the DCM. The identified category
+themes are used to label every node in the hierarchies. In Figure 6, we only show the largest
+hierarchy developed from CORPUS-2 due to space limitation.</p>
+        <p>We examined the feasibility of our hierarchy generation process by measuring the intrahierarchy and extra-hierarchy distances. Since text categorization performs a kind of clustering
+process, measuring these two kinds of distance reveals the effectiveness of the hierarchies.
+A hierarchy can be considered as a cluster of neurons that represent similar document
+clusters. These neurons share a common theme because they belong to the same hierarchy.
+We expect that they will produce a small intra-hierarchy distance that is defined by:</p>
+        <center>
+        
+        <img src="Screenshot (36).png"></center>
+        <p id="figure">Figure 4: The category hierarchies of CORPUS-1.</p>
+        
+        <center><img src="Screenshot (32).png"></center>
+        <p id ="page">214</p>
+        
+            <p id="figure">Figure 5: English translation of Figure 4.</p>
+        <center>
+        <img src="Screenshot (33).png"></center>
+        <p id="figure">Figure 6: One of the category hierarchies developed from CORPUS-2.</p></center>
+        <center>
+        <img src="Screenshot (34).png"></center>
+        <p id ="page">215</p>
+        
+        <p id="figure">Table 1: The intra- and extra-hierarchy distances of every hierarchy developed from
+CORPUS-1 and CORPUS-2. The root node columns show the neuron indices of the root
+            node of each hierarchy</p>
+        <center>
+            <hr>
+            
+            <h2>CORPUS-1</h2>
+            
+            
+        <table>
+            
+            <tr>
+                <th>Hierarchy</th>
+                <th>Root node</th>
+                <th>Intra-hierarchy distance</th>
+                <th>Extra-hierarchy distance</th>
+                
+            </tr>
+            <tr>
+            <td>1</td>
+                <td>57</td>
+                <td>0</td>
+                <td>2.62</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>22</td>
+                <td>0.97</td>
+                <td>2.59</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>17</td>
+                <td>0</td>
+                <td>2.71</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>24</td>
+                <td>1.23</td>
+                <td>2.57</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>46</td>
+                <td>2.77</td>
+                <td>2.45</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>48</td>
+                <td>1.13</td>
+                <td>2.54</td>
+            </tr>
+            <tr>
+               <td>7</td> 
+                <td>35</td>
+                <td>1.82</td>
+                <td>2.20</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>3</td>
+                <td>0</td>
+                <td>3.10</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>33</td>
+                <td>0</td>
+                <td>2.71</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>20</td>
+                <td>0</td>
+                <td>2.63</td>
+                </tr>
+            </center>
+            
+        </table>
+        <h2><center>CORPUS-2</h2>
+        <table>
+            
+            <tr>
+                <th>Hierarchy</th>
+                <th>Root node</th>
+                <th>Intra-hierarchy distance</th>
+                <th>Extra-hierarchy distance</th>
+                
+            </tr>
+            <tr>
+            <td>1</td>
+                <td>53</td>
+                <td>2.18</td>
+                <td>2.39</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>5</td>
+                <td>2.01</td>
+                <td>2.64</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>2</td>
+                <td>1.37</td>
+                <td>3.08</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>119</td>
+                <td>1.90</td>
+                <td>2.87</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>81</td>
+                <td>1.95</td>
+                <td>2.88</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>200</td>
+                <td>2.17</td>
+                <td>2.77</td>
+            </tr>
+            <tr>
+               <td>7</td> 
+                <td>40</td>
+                <td>1.73</td>
+                <td>3.48</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>310</td>
+                <td>2.41</td>
+                <td>2.60</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>36</td>
+                <td>1.86</td>
+                <td>2.96</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>259</td>
+                <td>1.60</td>
+                <td>2.90z</td>
+            </tr>
+            
+            
+        </table>
+            <p>where h is the neuron index of the root node of the hierarchy, and Lh
+ is the set of neuron indices
+of its leaf nodes. On the other hand, neurons in different hierarchies should be less similar.
+Thus, we may expect that a large extra-hierarchy distance will be produced. The extrahierarchy distance of hierarchy h is defined as follow:</p>
+            <img src="Screenshot (36).png">
+            <p>Table 1 lists the intra- and extra-hierarchy distances for each hierarchy. We can observe that
+only one of twenty hierarchies has an intra-hierarchy distance greater than its extra-hierarchy
+distance. Therefore, we may consider that the generated hierarchies successfully divide the
+document clusters into their appropriate hierarchies.</p>
+            <p>&nbsp &nbsp &nbsp &nbsp We also examined the feasibility of the theme identification process by comparing the
+overall importance of an identified theme to the rest of the terms associated with the same
+category. For any category k, we calculated the average synaptic weight of every terms over </p>
+            
+            
+        
+        
+        
+    </body>
+</html>
